@@ -1,0 +1,57 @@
+{
+  "Comment": "Lambda",
+  "StartAt": "pa",
+  
+ 
+  "States": {
+     "pa":{
+       "Type":"Pass",
+       "Next":"Chk"
+                },
+    
+    "Chk": {
+      "Type": "Choice",
+      "Choices" : [
+          {
+       "Variable":"$.abc",
+        "StringEquals": "stop",
+        "Next" : "stopIns"      
+         },
+        {
+       "Variable":"$.abc",
+        "StringEquals": "start",
+        "Next" : "startIns"  
+        },
+       {
+       "Variable":"$.abc",
+        "StringEquals": "terminate",
+        "Next" : "terminateIns"
+       },
+        {
+          "Variable":"$.abc",
+          "StringEquals":"exit",
+          "Next":"fState"
+        }
+      ]
+     },
+    "startIns":{
+      "Type":"Task", 
+      "Resource":"arn:aws:lambda:ap-south-1:545033201860:function:START",    
+      "End":true
+      },
+    "stopIns":{
+      "Type":"Task",
+      "Resource":"arn:aws:lambda:ap-south-1:545033201860:function:Stop",   
+      "End":true
+      },
+    "terminateIns":{
+      "Type":"Task",
+      "Resource":"arn:aws:lambda:ap-south-1:545033201860:function:terminate_ec2",
+      "End":true
+      },
+    "fState": {
+       "Type": "Fail",
+       "Cause": "Exit entered"
+     }
+  }
+}
